@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import User from "../models/user.model";
+import jwt from "jsonwebtoken";
+import { config } from "../config/config";
 
 export const handleRegister = async (
   req: Request,
@@ -26,6 +28,15 @@ export const handleRegister = async (
       password,
     });
 
-    res.json({ id: newUser._id });
+    // ISSUE ACCESSTOKEN
+    const token = jwt.sign(
+      { userId: newUser._id },
+      config.jwtSecret as string,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.json({ id: newUser._id, token });
   } catch (error) {}
 };
