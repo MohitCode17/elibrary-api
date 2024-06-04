@@ -3,10 +3,15 @@ import globalErrorHandler from "./middlewares/globalErrorHandler";
 
 const app = express();
 
-// ROUTES
-app.get("/test", (req, res) => {
-  res.json({ message: "Api Test Passed ✅" });
-});
+// MIDDLEWARE
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// IMPORT ROUTES
+import userRoutes from "./routes/user.routes";
+
+// ROUTES DECLARATION
+app.use("/api/users", userRoutes);
 
 // GLOBAL ERROR HANDLER
 app.use(globalErrorHandler);
