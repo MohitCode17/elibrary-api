@@ -37,6 +37,8 @@ export const handleRegister = async (
       }
     );
 
-    res.json({ id: newUser._id, token });
-  } catch (error) {}
+    res.status(201).json({ id: newUser._id, token });
+  } catch (error) {
+    return next(createHttpError(500, "Error while register user !!"));
+  }
 };
