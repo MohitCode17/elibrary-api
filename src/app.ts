@@ -9,9 +9,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // IMPORT ROUTES
 import userRoutes from "./routes/user.routes";
+import bookRoutes from "./routes/book.routes";
 
 // ROUTES DECLARATION
 app.use("/api/users", userRoutes);
+app.use("/api/books", bookRoutes);
 
 // GLOBAL ERROR HANDLER
 app.use(globalErrorHandler);
