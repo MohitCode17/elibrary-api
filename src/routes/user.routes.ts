@@ -1,5 +1,5 @@
 import express from "express";
-import { handleRegister } from "../controllers/user.controller";
+import { handleLogin, handleRegister } from "../controllers/user.controller";
 
 const router = express.Router();
 
@@ -7,5 +7,10 @@ const router = express.Router();
 // PATH: /api/users/register
 
 router.post("/register", handleRegister);
+
+// ROUTE: LOGIN USER
+// PATH: /api/users/login
+
+router.post("/login", handleLogin);
 
 export default router;
