@@ -8,7 +8,7 @@ const router = express.Router();
 // MULTER CONFIG
 const upload = multer({
   dest: path.resolve(__dirname, "../../public/data/uploads"),
-  limits: { fileSize: 3e7 }, // 30mb
+  limits: { fileSize: 1e7 }, // 10mb file size limit
 });
 
 // ROUTE: CREATE BOOK
