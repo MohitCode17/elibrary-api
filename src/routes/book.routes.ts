@@ -1,11 +1,26 @@
 import express from "express";
 import { handleCreateBook } from "../controllers/book.controller";
+import multer from "multer";
+import path from "path";
 
 const router = express.Router();
+
+// MULTER CONFIG
+const upload = multer({
+  dest: path.resolve(__dirname, "../../public/data/uploads"),
+  limits: { fileSize: 3e7 }, // 30mb
+});
 
 // ROUTE: CREATE BOOK
 // PATH: /api/books
 
-router.post("/", handleCreateBook);
+router.post(
+  "/",
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "file", maxCount: 1 },
+  ]),
+  handleCreateBook
+);
 
 export default router;
