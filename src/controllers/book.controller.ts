@@ -3,6 +3,7 @@ import cloudinary from "../config/cloudinary";
 import path from "path";
 import createHttpError from "http-errors";
 import Book from "../models/book.model";
+import fs from "fs";
 
 export const handleCreateBook = async (
   req: Request,
@@ -25,6 +26,7 @@ export const handleCreateBook = async (
 
     let uploadResult;
     let bookFileUploadResult;
+
     try {
       // UPLOAD TO CLOUDINARY
       uploadResult = await cloudinary.uploader.upload(filePath, {
@@ -47,6 +49,15 @@ export const handleCreateBook = async (
         filename_override: bookFileName,
         folder: "book-pdf",
         format: "pdf",
+      });
+
+      // DELETE TEMP FILE
+      fs.unlink(filePath, (err) => {
+        if (err) throw err;
+      });
+
+      fs.unlink(bookFilePath, (err) => {
+        if (err) throw err;
       });
     } catch (error) {
       next(createHttpError(500, `Error uploading the files: ${error}`));
