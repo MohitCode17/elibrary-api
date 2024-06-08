@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import cloudinary from "../config/cloudinary";
 import path from "path";
 import createHttpError from "http-errors";
+import Book from "../models/book.model";
 
 export const handleCreateBook = async (
   req: Request,
@@ -9,6 +10,7 @@ export const handleCreateBook = async (
   next: NextFunction
 ) => {
   try {
+    const { title, genre } = req.body;
     const files = req.files as { [filedname: string]: Express.Multer.File[] };
 
     // 👉 UPLOAD TO COVER IMAGE FOR BOOK
@@ -21,9 +23,11 @@ export const handleCreateBook = async (
       fileName
     );
 
+    let uploadResult;
+    let bookFileUploadResult;
     try {
       // UPLOAD TO CLOUDINARY
-      const uploadResult = await cloudinary.uploader.upload(filePath, {
+      uploadResult = await cloudinary.uploader.upload(filePath, {
         filename_override: fileName,
         folder: "book-covers",
         format: coverImageMimeType,
@@ -38,19 +42,26 @@ export const handleCreateBook = async (
       );
 
       // UPLOAD TO CLOUDINARY
-      const bookFileUploadResult = await cloudinary.uploader.upload(
-        bookFilePath,
-        {
-          resource_type: "raw",
-          filename_override: bookFileName,
-          folder: "book-pdf",
-          format: "pdf",
-        }
-      );
+      bookFileUploadResult = await cloudinary.uploader.upload(bookFilePath, {
+        resource_type: "raw",
+        filename_override: bookFileName,
+        folder: "book-pdf",
+        format: "pdf",
+      });
     } catch (error) {
       next(createHttpError(500, `Error uploading the files: ${error}`));
     }
-    res.send({});
+
+    // CREATE A NEW BOOK
+    const newBook = await Book.create({
+      title,
+      author: "665f4e428df62cc9198e34ef",
+      coverImage: uploadResult?.secure_url,
+      file: bookFileUploadResult?.secure_url,
+      genre,
+    });
+
+    res.status(200).json({ id: newBook._id });
   } catch (error) {
     next(createHttpError(500, `Error creating a new book: ${error}`));
   }
