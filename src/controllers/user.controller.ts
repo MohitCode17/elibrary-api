@@ -32,13 +32,9 @@ export const handleRegister = async (
     });
 
     // ISSUE ACCESSTOKEN
-    const token = jwt.sign(
-      { userId: newUser._id },
-      config.jwtSecret as string,
-      {
-        expiresIn: "7d",
-      }
-    );
+    const token = jwt.sign({ sub: newUser._id }, config.jwtSecret as string, {
+      expiresIn: "7d",
+    });
 
     res.status(201).json({ id: newUser._id, token });
   } catch (error) {
@@ -69,7 +65,7 @@ export const handleLogin = async (
     if (!isMatch) return next(createHttpError(400, "Invalid credentials !!"));
 
     // ISSUE ACCESSTOKEN
-    const token = jwt.sign({ userId: user._id }, config.jwtSecret as string, {
+    const token = jwt.sign({ sub: user._id }, config.jwtSecret as string, {
       expiresIn: "7d",
     });
 
