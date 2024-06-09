@@ -80,3 +80,9 @@ export const handleCreateBook = async (
     next(createHttpError(500, `Error creating a new book: ${error}`));
   }
 };
+
+export const handleGetAllBooks = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};

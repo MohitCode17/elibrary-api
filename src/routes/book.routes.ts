@@ -1,5 +1,8 @@
 import express from "express";
-import { handleCreateBook } from "../controllers/book.controller";
+import {
+  handleCreateBook,
+  handleGetAllBooks,
+} from "../controllers/book.controller";
 import multer from "multer";
 import path from "path";
 import authenticate from "../middlewares/authenticate";
@@ -24,5 +27,10 @@ router.post(
   ]),
   handleCreateBook
 );
+
+// ROUTE: GET ALL BOOKS
+// PATH: /api/books
+
+router.get("/", handleGetAllBooks);
 
 export default router;
