@@ -2,6 +2,7 @@ import express from "express";
 import {
   handleCreateBook,
   handleGetAllBooks,
+  handleGetSingleBook,
 } from "../controllers/book.controller";
 import multer from "multer";
 import path from "path";
@@ -32,5 +33,9 @@ router.post(
 // PATH: /api/books
 
 router.get("/", handleGetAllBooks);
+
+// ROUTE: GET SINGLE BOOK
+// PATH: /api/books/:bookId
+router.get("/:bookId", handleGetSingleBook);
 
 export default router;

@@ -97,3 +97,9 @@ export const handleGetAllBooks = async (
     next(createHttpError(500, `Error while getting books: ${error}`));
   }
 };
+
+export const handleGetSingleBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
