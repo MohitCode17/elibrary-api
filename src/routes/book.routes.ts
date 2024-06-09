@@ -1,6 +1,7 @@
 import express from "express";
 import {
   handleCreateBook,
+  handleDeleteBook,
   handleGetAllBooks,
   handleGetSingleBook,
 } from "../controllers/book.controller";
@@ -38,4 +39,7 @@ router.get("/", handleGetAllBooks);
 // PATH: /api/books/:bookId
 router.get("/:bookId", handleGetSingleBook);
 
+// ROUTE: DELETE A BOOK
+// PATH: /api/books/:bookId
+router.delete("/:bookId", authenticate, handleDeleteBook);
 export default router;

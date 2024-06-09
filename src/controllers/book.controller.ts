@@ -115,3 +115,9 @@ export const handleGetSingleBook = async (
     next(createHttpError(500, `Error while getting book: ${error}`));
   }
 };
+
+export const handleDeleteBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
