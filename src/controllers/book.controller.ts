@@ -102,4 +102,16 @@ export const handleGetSingleBook = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    const { bookId } = req.params;
+
+    const book = await Book.findOne({ _id: bookId }).populate("author", "name");
+
+    if (!book) return next(createHttpError(404, "Book not found !"));
+
+    res.status(200).json(book);
+  } catch (error) {
+    next(createHttpError(500, `Error while getting book: ${error}`));
+  }
+};
