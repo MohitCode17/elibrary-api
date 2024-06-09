@@ -4,6 +4,7 @@ import {
   handleDeleteBook,
   handleGetAllBooks,
   handleGetSingleBook,
+  handleUpdateBook,
 } from "../controllers/book.controller";
 import multer from "multer";
 import path from "path";
@@ -42,4 +43,17 @@ router.get("/:bookId", handleGetSingleBook);
 // ROUTE: DELETE A BOOK
 // PATH: /api/books/:bookId
 router.delete("/:bookId", authenticate, handleDeleteBook);
+
+// ROUTE: UPDATE BOOK
+// PATH: /api/books/:bookId
+router.patch(
+  "/:bookId",
+  authenticate,
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "file", maxCount: 1 },
+  ]),
+  handleUpdateBook
+);
+
 export default router;

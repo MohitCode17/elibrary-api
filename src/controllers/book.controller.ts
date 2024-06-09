@@ -163,3 +163,9 @@ export const handleDeleteBook = async (
     next(createHttpError(500, `Error deleting a book: ${error}`));
   }
 };
+
+export const handleUpdateBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
