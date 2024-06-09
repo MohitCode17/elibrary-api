@@ -85,4 +85,15 @@ export const handleGetAllBooks = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    const books = await Book.find().populate("author", "name");
+
+    if (books.length < 1)
+      return next(createHttpError(404, "Books not found !"));
+
+    res.status(200).json(books);
+  } catch (error) {
+    next(createHttpError(500, `Error while getting books: ${error}`));
+  }
+};
