@@ -168,4 +168,43 @@ export const handleUpdateBook = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    const { title, genre } = req.body;
+    const { bookId } = req.params;
+
+    const book = await Book.findOne({ _id: bookId });
+    if (!book) return next(createHttpError(404, "Book not found !"));
+
+    // CHECK USER ACCESS
+    const _req = req as AuthRequest;
+    if (book.author.toString() !== _req.userId)
+      return next(createHttpError(403, "You can not update others book"));
+
+    // CHECK IF IMAGE OR FILE FIELD IS EXISTS
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    let completeCoverImage = "";
+
+    if (files.coverImage) {
+      const filename = files.coverImage[0].filename;
+      const coverImageMimeType = files.coverImage[0].mimetype.split("/").at(-1);
+
+      // SEND FILE TO CLOUDINARY
+      const filePath = path.resolve(
+        __dirname,
+        "../../public/data/uploads",
+        filename
+      );
+
+      completeCoverImage = filename;
+      const uploadResult = await cloudinary.uploader.upload(filePath, {
+        filename_override: completeCoverImage,
+        folder: "book-covers",
+        format: coverImageMimeType,
+      });
+    }
+  } catch (error) {
+    next(createHttpError(500, `Error updating a book: ${error}`));
+  }
+};
